@@ -1,0 +1,466 @@
+[general]
+static=yes
+writeprotect=no
+clearglobalvars=no
+priorityjumping=yes
+
+
+[globals]
+SOUNDS=priv-callerintros
+LIMIT_WARNING_FILE=beep
+LIMIT_PLAYAUDIO_CALLEE=no
+LIMIT_PLAYAUDIO_CALLER=yes
+SALIDATELEFONICA=SIP/primario/
+SALIDATELEFONICA2=IAX2/central_old3/${EXTEN}
+SALIDATELEFONICA3=SIP/optical/
+SALIDAMAXIMA=SIP/trunk_CIX
+MOVISTAR=SIP/Trunk-Movistar/
+;SALIDAMAXIMA=IAX2/utp/|
+
+[ivr_utp04]
+
+exten => UTP-O4-Col,1,Set(INTENTOS=1)
+exten => UTP-O4-Col,n,NoOp
+exten => UTP-O4-Col,n,Set(TIMEOUT(digit)=3)
+exten => UTP-O4-Col,n,Set(TIMEOUT(response)=4)
+exten => UTP-O4-Col,n,Background(utp/ivr_utp_27)
+exten => UTP-O4-Col,n,WaitExten
+
+exten => 1,1,Set(CALLERID(name)=GRP_PAGOS_IVR)
+same => n,Goto(derivacion_opt,UTP-O4-SO1-Con,1)
+;exten => 1,n,Dial(SIP/1104,,tTg)
+;exten => 1,n,GotoIf($["${DIALSTATUS}" = "NO ANSWER"]?dir_t,UTP-O4-SO1-NoC,1)
+;exten => 1,n,Hangup
+
+exten => 2,1,Set(CALLERID(name)=GRP_LOGISTICA_IVR)
+same=> n,Goto(derivacion_opt,UTP-O4-SO2-Con,1)
+;exten => 2,n,Dial(SIP/1246&SIP/2218,,tTg)
+;exten => 2,n,GotoIf($["${DIALSTATUS}" = "NO ANSWER"]?dir_t,UTP-O4-SO2-NoC,1)
+;exten => 2,n,Hangup
+
+exten => 3,1,Set(CALLERID(name)=GRP_CONTABILIDAD_IVR)
+same=> n,Goto(derivacion_opt,UTP-O4-SO3-Con,1)
+
+;exten => 3,n,Dial(SIP/1657,,tTg)
+;exten => 3,n,GotoIf($["${DIALSTATUS}" = "NO ANSWER"]?dir_t,UTP-O4-SO3-NoC,1)
+;exten => 3,n,Hangup
+
+exten => 4,1,Set(CALLERID(name)=GRP_GDH_IVR)
+same=> n,Goto(derivacion_opt,UTP-O4-SO4-Con,1)
+
+;exten => 4,n,Dial(SIP/1804&SIP/1899,,tTg)
+;exten => 4,n,GotoIf($["${DIALSTATUS}" = "NO ANSWER"]?dir_t,UTP-O4-SO4-NoC,1)
+;exten => 4,n,Hangup
+
+exten => 5,1,Set(CALLERID(name)=GRP_MANTENIMIENTO_IVR)
+same=> n,Goto(derivacion_opt,UTP-O4-SO5-Con,1)
+
+;exten => 5,n,Dial(SIP/1645&SIP/2373,,tTg)
+;exten => 5,n,GotoIf($["${DIALSTATUS}" = "NO ANSWER"]?dir_t,UTP-O4-SO5-NoC,1)
+;exten => 5,n,Hangup
+
+exten => 6,1,Set(CALLERID(name)=GRP_SISTEMAS_IVR)
+same=> n,Goto(derivacion_opt,UTP-O4-SO6-Con,1)
+
+;exten => 6,n,Dial(SIP/1553,,tTg)
+;exten => 6,n,GotoIf($["${DIALSTATUS}" = "NO ANSWER"]?dir_t,UTP-O4-SO6-NoC,1)
+;exten => 6,n,Hangup
+
+exten => 7,1,Set(CALLERID(name)=GRP_SISTEMAS_IVR)
+same=> n,Goto(derivacion_opt,UTP-O4-SO6-Con,1)
+;exten => 7,n,Dial(SIP/1482,,tTg)
+;exten => 7,n,GotoIf($["${DIALSTATUS}" = "NO ANSWER"]?derivacion_opt,UTP-O4-SO7-NoC,1)
+;exten => 7,n,GotoIf($["${DIALSTATUS}" = "ANSWERED"]?derivacion_opt,UTP-O4-SO7-Conte,1)
+;exten => 7,n,Hangup
+
+exten => u,1,Set(CALLERID(name)=CENTRAL_GRUPO)
+exten => u,n,Queue(1015)
+
+include => utp_interno
+
+exten => i,1,Goto(dir_i,UTP-O4-ERR,1)
+;exten => i,1,Background(utp/idat_ivr_opcion_no_valida)
+;exten => i,n,GotoIF($["${INTENTOS}"="3"]?vencio)
+;exten => i,n,Set(INTENTOS=$[${INTENTOS} + 1])
+;exten => i,n,NoOp(${INTENTOS})
+;exten => i,n,Goto(ivr_utp04,UTP-O4-Col,4)
+;exten => i,n(vencio),Background(utp/ivr_utp_02)
+;exten => i,n,Hangup
+
+exten => t,Set(CALLERID(name)="UTP_OPCION4_IVR)
+same=> n,Goto(dir_t,UTP-O4-NOP,1)
+
+[ivr_utp03]
+
+exten => UTP-O5-Col,1,Set(INTENTOS=1)
+exten => UTP-O5-Col,n,NoOp
+exten => UTP-O5-Col,n,Set(TIMEOUT(digit)=3)
+exten => UTP-O5-Col,n,Set(TIMEOUT(response)=4)
+;exten => UTP-O5-Col,n,Background(utp/ivr_utp_26)
+exten => UTP-O5-Col,n,Background(utp/IVR_UTP_EPG)
+exten => UTP-O5-Col,n,WaitExten
+
+exten => 1,1,Set(CALLERID(name)=EPG_INFORMES_IVR)
+same=> n,Goto(derivacion_opt,UTP-O5-SO1-Con,1)
+
+;exten => 1,n,Dial(SIP/1278,,tT)
+;exten => 1,n,GotoIf($["${DIALSTATUS}" = "NO ANSWER"]?dir_t,UTP-O5-SO1-NoC,1)
+;exten => 1,n,Hangup
+
+exten => 2,1,Set(CALLERID(name)=EPG_SERVACADE_IVR)
+same=> n,Goto(derivacion_opt,UTP-O5-SO2-Con,1)
+
+;exten => 2,n,Dial(SIP/2419,12,Tt)
+;exten => 2,n,Dial(SIP/2417,12,Tt)
+;exten => 2,n,GotoIf($["${DIALSTATUS}" = "NO ANSWER"]?dir_t,UTP-O5-SO2-NoC,1)
+;exten => 2,n,Hangup
+
+exten => 3,1,Set(CALLERID(name)=EPG_DIRACADE_IVR)
+same=> n,Goto(derivacion_opt,UTP-O5-SO3-Con,1)
+
+;exten => 3,n,Dial(SIP/2443,12,Tt)
+;exten => 3,n,Dial(SIP/2470,12,Tt)
+;exten => 3,n,GotoIf($["${DIALSTATUS}" = "NO ANSWER"]?dir_t,UTP-O5-SO3-NoC,1)
+;exten => 3,n,Hangup
+
+exten => 4,1,Set(CALLERID(name)=EPG_CENINFO_IVR)
+same=> n,Goto(derivacion_opt,UTP-O5-SO4-Con,1)
+
+;exten => 4,n,Dial(SIP/2418,22,Tt)
+;exten => 4,n,GotoIf($["${DIALSTATUS}" = "NO ANSWER"]?dir_t,UTP-O5-SO4-NoC,1
+;exten => 4,n,Hangup
+
+exten => t,1,Set(CALLERID(name)=CENTRAL_EPG)
+same=> n,Goto(dir_t,UTP-O5-NOP,1)
+;exten => t,n,Dial(SIP/trunk-contact/100)
+;exten => t,n,Dial(SIP/trunk-contact3/112)
+
+include => utp_interno
+
+exten => i,1,Goto(dir_i,UTP-O5-ERR,1)
+;exten => i,1,Background(utp/idat_ivr_opcion_no_valida)
+;exten => i,n,GotoIF($["${INTENTOS}"="3"]?vencio)
+;exten => i,n,Set(INTENTOS=$[${INTENTOS} + 1])
+;exten => i,n,NoOp(${INTENTOS})
+;exten => i,n,Goto(ivr_utp03,UTP-O5-Col,4)
+;exten => i,n(vencio),Background(utp/ivr_utp_02)
+;exten => i,n,Hangup
+
+[ivr_utp02]
+
+exten => s,1,Set(INTENTOS=1)
+exten => s,n,NoOp
+exten => s,n,Set(TIMEOUT(digit)=3)
+exten => s,n,Set(TIMEOUT(response)=4)
+exten => s,n,Background(utp/MenuVentasUTP)
+exten => s,n,WaitExten
+
+exten => 1,1,Set(CALLERID(name)=UTP_ADMIPREUTP_IVR)
+exten => 1,n,Goto(ivr_utp02_op01,s,1)
+exten => 1,n,Hangup
+
+exten => 2,1,Set(CALLERID(name)=UTP_PPE_IVR)
+exten => 2,n,Goto(ivr_utp02_op02,s,1)
+exten => 2,n,Hangup
+
+exten => 3,1,Set(CALLERID(name)=UTP_POSTULANTE_IVR)
+exten => 3,n,Queue(1006,t,,,100)
+exten => 3,n,Dial(SIP/2100@trunk-edgeutp,35,gr)
+;exten => 3,n,Dial(SIP/trunk-contact/100)
+exten => 3,n,Hangup
+
+exten => 4,1,Set(CALLERID(name)=UTP_VISITACOLEGIO_IVR)
+exten => 4,n,Queue(1007,t,,,40)
+exten => 4,n,Dial(SIP/2100@trunk-edgeutp,35,gr)
+;exten => 4,n,Dial(SIP/trunk-contact/100)
+exten => 4,n,Hangup
+
+exten => t,1,Set(CALLERID(name)=CENTRAL_VENTAS)
+exten => t,n,Dial(SIP/2100@trunk-edgeutp,35,gr)
+;exten => t,n,Dial(SIP/trunk-contact/100)
+
+include => utp_interno
+
+;exten => i,1,Background(utp/idat_ivr_opcion_no_valida)
+;exten => i,n,GotoIF($["${INTENTOS}"="3"]?vencio)
+;exten => i,n,Set(INTENTOS=$[${INTENTOS} + 1])
+;exten => i,n,NoOp(${INTENTOS})
+;exten => i,n,Goto(ivr_utp02,s,4)
+;exten => i,n(vencio),Background(utp/ivr_utp_02)
+;exten => i,n,Hangup
+
+
+[ivr_utp02_op01]
+
+exten => s,1,Answer
+exten => s,n,Set(INTENTOS=1)
+exten => s,n,NoOp
+exten => s,n(opciones),Background(utp/utp_3opciones)
+exten => s,n(opciones),Background(utp/LSyATE)
+exten => s,n,Set(TIMEOUT(digit)=5)
+exten => s,n,Set(TIMEOUT(response)=4)
+exten => s,n,WaitExten
+
+exten => 1,1,Set(CALLERID(name)=UTP_VTS_ADMIPREUTP_LIMA_IVR)
+;exten => 1,n,Queue(1004,t,,,180)
+exten => 1,n,Dial(SIP/2100@trunk-edgeutp,35,gr)
+;exten => 1,n,Dial(SIP/trunk-contact/100)
+exten => 1,n,Hangup
+
+exten => 2,1,Set(CALLERID(name)=UTP_VTS_LN_ADMI_IVR)
+;exten => 2,n,Queue(1014,t,,,130)
+exten => 2,n,Dial(SIP/2101@trunk-edgeutp,35,gr)
+;exten => 2,n,Dial(SIP/trunk-contact/100)
+exten => 2,n,Hangup
+
+exten => 3,1,Set(CALLERID(name)=UTP_VTS_SJL_ADMI_IVR)
+;exten => 3,n,Queue(1016,t,,,120)
+exten => 3,n,Dial(SIP/2102@trunk-edgeutp,35,gr)
+;exten => 3,n,Dial(SIP/trunk-contact/100)
+exten => 3,n,Hangup
+
+exten => 4,1,Set(CALLERID(name)=UTP_VTS_LS_ADMI_IVR)
+;exten => 4,n,Dial(${SALIDATELEFONICA}970802335,35,Tt)
+;exten => 4,n,Dial(${SALIDATELEFONICA}933769015,35,Tt)
+;exten => 4,n,Dial(${SALIDATELEFONICA}922386240,35,Tt)
+exten => 4,n,Dial(SIP/2103@trunk-edgeutp,35,gr)
+exten => 4,n,Hangup
+
+exten => 5,1,Set(CALLERID(name)=UTP_VTS_ATE_ADMI_IVR)
+;exten => 5,n,Dial(${SALIDATELEFONICA}922386201,35,Tt)
+;exten => 5,n,Dial(${SALIDATELEFONICA}946416620,35,Tt)
+;exten => 5,n,Dial(${SALIDATELEFONICA}962353495,35,Tt)
+;exten => 5,n,Queue(1018,t,,,120)
+exten => 5,n,Dial(SIP/2104@trunk-edgeutp,35,gr)
+exten => 5,n,Hangup
+
+exten => t,1,Set(CALLERID(name)=UTP_OPCION1_IVR)
+exten => t,n,Dial(SIP/2100@trunk-edgeutp,35,gr)
+;exten => t,n,Dial(SIP/trunk-contact/100)
+
+;exten => i,1,Background(utp/idat_ivr_opcion_no_valida)
+;exten => i,n,GotoIF($["${INTENTOS}"="3"]?vencio)
+;exten => i,n,Set(INTENTOS=$[${INTENTOS} + 1])
+;exten => i,n,NoOp(${INTENTOS})
+;exten => i,n,Goto(ivr_utp_op01,s,opciones)
+;exten => i,n(vencio),Background(utp/ivr_utp_02)
+;exten => i,n,Hangup
+
+
+[ivr_utp02_op02]
+
+exten => s,1,Answer
+exten => s,n,Set(INTENTOS=1)
+exten => s,n,NoOp
+exten => s,n(opciones),Background(utp/utp_3opciones)
+exten => s,n(opciones),Background(utp/LSyATE)
+exten => s,n,Set(TIMEOUT(digit)=5)
+exten => s,n,Set(TIMEOUT(response)=4)
+exten => s,n,WaitExten
+
+exten => 1,1,Set(CALLERID(name)=UTP_VTS_PPE_LIMA_IVR)
+;exten => 1,n,Queue(1005,t,,,180)
+exten => 1,n,Dial(SIP/2100@trunk-edgeutp,35,gr)
+;exten => 1,n,Dial(SIP/trunk-contact/100)
+exten => 1,n,Hangup
+
+exten => 2,1,Set(CALLERID(name)=UTP_VTS_LN_PPE_IVR)
+;exten => 2,n,Queue(1014,t,,,130)
+exten => 2,n,Dial(SIP/2101@trunk-edgeutp,35,gr)
+;exten => 2,n,Dial(SIP/trunk-contact/100)
+exten => 2,n,Hangup
+
+exten => 3,1,Set(CALLERID(name)=UTP_VTS_SJL_ADMI_IVR)
+;exten => 3,n,Queue(1016,t,,,120)
+exten => 3,n,Dial(SIP/2102@trunk-edgeutp,35,gr)
+;exten => 3,n,Dial(SIP/trunk-contact/100)
+exten => 3,n,Hangup
+
+exten => 4,1,Set(CALLERID(name)=UTP_VTS_LS_PPE_IVR)
+;exten => 4,n,Dial(${SALIDATELEFONICA}970802335,35,Tt)
+;exten => 4,n,Dial(${SALIDATELEFONICA}933769015,35,Tt)
+;exten => 4,n,Dial(${SALIDATELEFONICA}922386240,35,Tt)
+exten => 4,n,Dial(SIP/2103@trunk-edgeutp,35,gr)
+exten => 4,n,Hangup
+
+exten => 5,1,Set(CALLERID(name)=UTP_VTS_ATE_PPE_IVR)
+;exten => 5,n,Dial(${SALIDATELEFONICA}922386201,35,Tt)
+;exten => 5,n,Dial(${SALIDATELEFONICA}946416620,35,Tt)
+;exten => 5,n,Dial(${SALIDATELEFONICA}962353495,35,Tt)
+;exten => 5,n,Queue(1018,t,,,120)
+exten => 5,n,Dial(SIP/2104@trunk-edgeutp,35,gr)
+exten => 5,n,Hangup
+
+exten => t,1,Set(CALLERID(name)=UTP_OPCION1_IVR)
+exten => t,n,Dial(SIP/2100@trunk-edgeutp,35,gr)
+;exten => t,n,Dial(SIP/trunk-contact/100)
+
+;exten => i,1,Background(utp/idat_ivr_opcion_no_valida)
+;exten => i,n,GotoIF($["${INTENTOS}"="3"]?vencio)
+;exten => i,n,Set(INTENTOS=$[${INTENTOS} + 1])
+;exten => i,n,NoOp(${INTENTOS})
+;exten => i,n,Goto(ivr_utp_op01,s,opciones)
+;exten => i,n(vencio),Background(utp/ivr_utp_02)
+;exten => i,n,Hangup
+
+[ivr_utp01]
+
+exten => UTP-Col,1,Set(INTENTOS=1)
+exten => UTP-Col,n,NoOp
+exten => UTP-Col,n,Set(TIMEOUT(digit)=3)
+exten => UTP-Col,n,Set(TIMEOUT(response)=4)
+;exten => UTP-Col,n(menu),Background(utp/ANONUEVO2020)
+exten => UTP-Col,n(menu),Background(utp/Licenciamiento)
+;exten => UTP-Col,n,Hangup
+;exten => UTP-Col,n(menu),Background(utp/ivr_utp_21)
+exten => UTP-Col,n(menu),Background(utp/UTP-NEW-HOLD)
+;exten => s,n(menu),Background(utp/FiestasPatrias)
+exten => UTP-Col,n,WaitExten
+
+exten => 1,1,Goto(ivr_utp_op02,UTP-O1-Col,1)
+
+;exten => 1,1,Goto(IVR_OP01_SOP09,UTP_OP01_SOP9_Col,1)
+;exten => 1,1,Background(Case/NEW-YEAR)
+
+exten => 2,1,Goto(ivr_utp_op01,UTP-O2-Con,1)
+
+exten => 3,1,Goto(ivr_utp_op03,UTP-O3-Col,1)
+
+exten => 4,1,Goto(ivr_utp04,UTP-O4-Col,1)
+
+exten => 5,1,Goto(ivr_utp03,UTP-O5-Col,1)
+
+;exten => 6,1,Background(Case/OP09REP)
+
+;exten => 7,1,Background(Case/CUARTO_GRUPO)
+;exten => 7,1,Dial(SIP/2222@trunk-Issabel,35,gr)
+;exten => 7,1,AGI(consolidacion_montos.php)
+
+;exten => 8,1,Goto(IVR_OP01_SOP09,UTP_OP01_SOP9_Col,1)
+
+;exten => 6,1,Goto(ivr_redes,redes_col,1)
+;exten => t,1,Goto(dir_t,UTP-NOP,1)
+exten => t,1,Set(CALLERID(name)=CENTRAL_UTP)
+same=> n,Goto(dir_t,UTP-NOP,1)
+;exten => t,n,Queue(1015)
+;exten => t,1,Goto(ivr_utp01,UTP-Col,menu)
+;exten => t,1,Set(CALLERID(name)=CENTRAL_UTP)NO-ACTIVAR-JAMAS
+;exten => t,n,Dial(SIP/trunk-contact/100)NO-ACTIVAR-JAMAS
+
+include => utp_interno
+
+exten => i,1,Goto(dir_i,UTP-ERR,1)
+;exten => i,1,Background(utp/idat_ivr_opcion_no_valida)
+;exten => i,n,GotoIF($["${INTENTOS}"="3"]?vencio)
+;exten => i,n,Set(INTENTOS=$[${INTENTOS} + 1])
+;exten => i,n,NoOp(${INTENTOS})
+;exten => i,n,Goto(ivr_utp01,UTP-Col,4)
+;exten => i,n(vencio),Background(utp/ivr_utp_02)
+;exten => i,n,Hangup
+
+[ivr_redes]
+
+;exten => redes_col,1,Set(INTENTOS=1)
+;exten => redes_col,n,NoOp
+;exten => redes_col,n,Set(TIMEOUT(digit)=3)
+;exten => redes_col,n,Set(TIMEOUT(response)=4)
+;exten => redes_col,n,Background(utp/IVR_UTP_EPG)
+;exten => redes_col,n,WaitExten
+
+;exten => 1,1,Set(CALLERID(name)=RED_ONE)
+;exten => 1,n,Dial(SIP/1482)
+;exten => 1,n,Hangup
+
+;exten => 2,1,Set(CALLERID(name)=RED_TWO)
+;exten => 2,n,Goto(ivr_redes_subop2,redes_Op02_col,1)
+;exten => 2,n,Hangup
+
+;exten => 3,1,Set(CALLERID(name)=RED_THREE)
+;;exten => 3,n,Dial(SIP/2777)
+;exten => 3,n,Hangup
+
+;;exten => t,1,Set(CALLERID(name)=CENTRAL_EPG)
+;;exten => t,n,Dial(SIP/trunk-contact/100)
+;;exten => t,n,Dial(SIP/trunk-contact3/112)
+
+;;i => redes_OpNoVal
+
+include => utp_interno
+
+;exten => i,1,Background(utp/idat_ivr_opcion_no_valida)
+;exten => i,n,GotoIF($["${INTENTOS}"="3"]?vencio)
+;exten => i,n,Set(INTENTOS=$[${INTENTOS} + 1])
+;exten => i,n,NoOp(${INTENTOS})
+;exten => i,n,Goto(ivr_redes,redes_col,4)
+;exten => i,n(vencio),Background(utp/ivr_utp_02)
+;exten => i,n,Hangup
+;;exten => redes_OpNoVal,n,Hangup
+
+[ivr_redes_subop2]
+
+;exten => redes_Op02_col,1,Set(INTENTOS=1)
+;exten => redes_Op02_col,n,NoOp
+;exten => redes_Op02_col,n,Set(TIMEOUT(digit)=3)
+;exten => redes_Op02_col,n,Set(TIMEOUT(response)=4)
+;exten => redes_Op02_col,n,Background(utp/IVR_UTP_EPG)
+;exten => redes_Op02_col,n,WaitExten
+
+;;exten => 1,1,Set(CALLERID(name)=RED_ONE)
+;;exten => 1,n,Dial(SIP/1699)
+;;exten => 1,n,Hangup
+
+;exten => 2,1,Set(CALLERID(name)=RED_THREE)
+;exten => 2,n,Dial(SIP/1482)
+;exten => 2,n,Hangup
+
+;;exten => t,1,Set(CALLERID(name)=CENTRAL_EPG)
+;;exten => t,n,Dial(SIP/trunk-contact/100)
+;;exten => t,n,Dial(SIP/trunk-contact3/112)
+
+;include => utp_interno
+
+exten => redes_SuOp2NoVal,1,Background(utp/idat_ivr_opcion_no_valida)
+exten => redes_SuOp2NoVal,n,GotoIF($["${INTENTOS}"="3"]?vencio)
+exten => redes_SuOp2NoVal,n,Set(INTENTOS=$[${INTENTOS} + 1])
+exten => redes_SuOp2NoVal,n,NoOp(${INTENTOS})
+exten => redes_SuOp2NoVal,n,Goto(ivr_redes_subop2,redes_Op02_col,4)
+exten => redes_SuOp2NoVal,n(vencio),Background(utp/ivr_utp_02)
+exten => redes_SuOp2NoVal,n,Hangup
+
+[ivr_utp_op01]
+include => ext-findmefollow
+exten => UTP-O2-Con,1,Set(CALLERID(name)=UTP_ADMIPREUTP_LIMA_IVR)
+;same=> n,Goto(derivacion_opt,UTP-O2-SO1-LC-Con,1)
+exten => UTP-O2-Con,n,Dial(SIP/2100@trunk-edgeutp02,200,gr)
+
+
+;exten => UTP-O2-Con,n,Dial(${SALIDATELEFONICA}984883137,20,f)
+;exten => UTP-O2-Con,n,Dial(SIP/5555)
+;exten => UTP-O2-Con,n,Hangup()
+
+;exten =>  UTP-O2-Con,n,Goto(5555,FM5555)
+;########Este es el original #########################
+;;exten => UTP-O2-Con,n,Gosub(salida-cidutp,${CALLERID(num)},1(933395039,960173812,960173908,934839583,926907429,960172931,977887556,902743616))
+
+
+;exten => UTP-O2-Con,n,Gosub(salida-cidutp,s,1(958009332))
+;exten => UTP-O2-Con,n,Gosub(salida-cidutp,s,1(960173584))
+;exten => UTP-O2-Con,n,Gosub(salida-cidutp,s,1(933395039))
+;exten => UTP-O2-Con,n,Gosub(salida-cidutp,s,1(960173812))
+;exten => UTP-O2-Con,n,Gosub(salida-cidutp,s,1(960173908))
+;exten => UTP-O2-Con,n,Gosub(salida-cidutp,s,1(934839583))
+;exten => UTP-O2-Con,n,Gosub(salida-cidutp,s,1(926907429))
+;exten => UTP-O2-Con,n,Gosub(salida-cidutp,s,1(960172931))
+;exten => UTP-O2-Con,n,Gosub(salida-cidutp,s,1(977887556))
+;exten => UTP-O2-Con,n,Gosub(salida-cidutp,s,1(902743616))
+;exten => 1,n,Dial(SIP/trunk-contact/100,12,Tt)
+;exten => 1,n,Queue(1004,t,,,180)
+;;exten => 1,n,Dial(SIP/trunk-contact/100)
+;exten => 1,n,Hangup
+
+;exten => UTP-O2-Col,1,Answer
+;exten => UTP-O2-Col,n,Set(INTENTOS=1)
+;exten => UTP-O2-Col,n,NoOp
+;;exten => UTP-O2-Col,n(opciones),Background(utp/ivr_utp_22)
+;exten => UTP-O2-Col,n,Background(utp/MenuVentasUTP)
+;exten => UTP-O2-Col,n,Set(TIMEOUT(digit)=5)
